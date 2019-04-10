@@ -13,12 +13,14 @@ namespace DelegatesAndEvents
         GenerateReports
     }
 
-    class Program
+    internal class Program
     {
         public delegate void WorkPerformedHandler(int hours, WorkType workType);
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            #region DelegatesOperations
+
             //WorkPerformedHandler del1 = new WorkPerformedHandler(WorkPerformed1);
             //WorkPerformedHandler del2 = new WorkPerformedHandler(WorkPerformed2);
             //WorkPerformedHandler del3 = new WorkPerformedHandler(WorkPerformed3);
@@ -28,9 +30,29 @@ namespace DelegatesAndEvents
 
             //del1(10, WorkType.GenerateReports);
 
+            #endregion
+
+            #region InlineDelegate
+
+            // Inline Delegate with Annonymous Method
+            // worker.WorkPerformed += delegate (object sender, WorkPerformedEventArgs e)
+            // {
+            //     Console.WriteLine("Hours worked: " + e.Hours + " " + e.WorkType);
+            // };
+
+            #endregion
+
             var worker = new Worker();
-            worker.WorkPerformed += new EventHandler<WorkPerformedEventArgs>(Worker_WorkPerformed);
-            worker.WorkCompleted += new EventHandler(Worker_WorkCompleted);
+
+            worker.WorkPerformed += Worker_WorkPerformed; // Delegate Inference
+            worker.WorkCompleted += Worker_WorkCompleted;
+
+            #region UsingLambda
+
+            // Using Lambda
+            worker.WorkPerformed += (s, e) => Console.WriteLine("Hours worked: " + e.Hours + " " + e.WorkType);
+
+            #endregion
 
             worker.DoWork(8, WorkType.GenerateReports);
 
@@ -65,6 +87,6 @@ namespace DelegatesAndEvents
         //private static void WorkPerformed3(int hours, WorkType workType)
         //{
         //    Console.WriteLine("WorkPerformed3 called " + hours.ToString());
-        //}        
+        //}
     }
 }
