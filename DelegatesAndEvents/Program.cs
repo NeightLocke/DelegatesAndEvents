@@ -6,19 +6,16 @@ using System.Threading.Tasks;
 
 namespace DelegatesAndEvents
 {
-    public enum WorkType
-    {
-        GoToMeetings,
-        Golf,
-        GenerateReports
-    }
-
-    internal class Program
+    public class Program
     {
         public delegate void WorkPerformedHandler(int hours, WorkType workType);
 
+        public delegate int BizRulesDelegate(int x, int y);
+
         private static void Main(string[] args)
         {
+            List<int> p = new List<int>();
+
             #region DelegatesOperations
 
             //WorkPerformedHandler del1 = new WorkPerformedHandler(WorkPerformed1);
@@ -55,6 +52,28 @@ namespace DelegatesAndEvents
             #endregion
 
             worker.DoWork(8, WorkType.GenerateReports);
+
+            Console.WriteLine("USING LAMBDAS");
+
+            BizRulesDelegate addDel = (x, y) => x + y;
+            BizRulesDelegate multiplyDel = (x, y) => x * y;
+
+            var data = new ProcessData();
+            data.Process(2, 3, multiplyDel);
+
+            Console.WriteLine("USING ACTION");
+
+            Action<int, int> myAction = (x, y) => Console.WriteLine(x + y);
+            Action<int, int> myMultiplyAction = (x, y) => Console.WriteLine(x * y);
+
+            data.ProcessAction(2, 3, myAction);
+
+            Console.WriteLine("USING FUNC");
+
+            Func<int, int, int> funcAddDel = (x, y) => { return x + y; };
+            Func<int, int, int> funcMultiplyDel = (x, y) => { return x * y; };
+
+            data.ProcessFunc(3, 2, funcMultiplyDel);
 
             Console.Read();
         }
